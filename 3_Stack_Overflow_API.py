@@ -1,11 +1,14 @@
 import requests
 import pprint
+from datetime import datetime
 
-def stack_posts():
+now = datetime.today().strftime('%Y-%m-%d')
+
+def stack_posts(date_from, tag):
     url = "https://api.stackexchange.com/"
     version = "/2.2"
     questions = "/questions"
-    params = {'fromdate': '2021-03-21', 'todate': '2021-03-23', 'tagged': 'python', 'site': 'stackoverflow'}
+    params = {'fromdate': date_from, 'todate': now, 'tagged': tag, 'site': 'stackoverflow'}
 
     response = requests.get(url + version + questions, params=params)
 
@@ -15,9 +18,8 @@ def stack_posts():
         return 'Ошибка'
     else:
         for item in response.json()['items']:
-            #здесь должно быть условие, объединяющее многострочные тайтлы
             question_list.append(item['title'])
         return question_list
 
 
-pprint.pprint(stack_posts())
+pprint.pprint(stack_posts('2021-03-21', 'python'))
